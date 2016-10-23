@@ -1,0 +1,18 @@
+Notify me that notepad was started. 
+
+$id="classdemo"
+$query = "SELECT * FROM __InstanceCreationEvent WITHIN 5 WHERE TargetInstance ISA 'Win32_Process' AND TargetInstance.Name='notepad.exe'"
+$action={ $Global:MyEvt= $event ; write-host "notepad event occurred" }
+
+Register-WmiEvent -SourceIdentifier $id -Query $query -Action $Action
+
+======================================================================
+Stop Notepad
+
+
+$sourceidentifier="classdemo"
+$query = "SELECT * FROM __InstanceCreationEvent WITHIN 5 WHERE TargetInstance ISA 'Win32_Process' AND TargetInstance.Name='notepad.exe'"
+$action={$Global:MyEvt= $event ; write-host "notepad event occurred" ; stop-process -id $myEvt.SourceEventArgs.NewEvent.TargetInstance.ProcessId }
+
+
+Register-WmiEvent -SourceIdentifier $sourceIdentifier -Query $query -Action $action
